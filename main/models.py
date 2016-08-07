@@ -16,6 +16,7 @@ class Post(models.Model):
     photo = ImageField(upload_to='%Y/%m/%d', null=True)
     artist = models.CharField(max_length=200)
     songname = models.CharField(max_length=200)
+    videourl = models.CharField(max_length=300, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     sites = models.ManyToManyField(Site)

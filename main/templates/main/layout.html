@@ -28,17 +28,16 @@
       </div>
     </div>
     <div class="row">
-    <div class="col-md-12 col-xs-12">
     <div class="page-header" style="background-color: #1ee6e6;">
       <a style="text-decoration: none;" href="{% url 'index' %}"><div class="font-effect-shadow-multiple"><h1 style="margin-top: 10px; color: white; margin-left: 10px; font-size: 200px; font-family: 'Rancho';">SD music</h1></div></a>
       
-      
-      <a href="{% url 'registerForm' %}" style ="margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
-      <a href="{% url 'loginForm' %}" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
-      {% if user.is_authenticated %}
-      <a href="/accounts/logout" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
-      {% endif %}
-    </div>
+      <div class="right">
+        <a href="{% url 'registerForm' %}" style ="margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
+        <a href="{% url 'loginForm' %}" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
+        {% if user.is_authenticated %}
+        <a href="/accounts/logout" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endif %}
+      </div>
     </div>
     </div>
   </div>
