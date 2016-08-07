@@ -1,0 +1,36 @@
+{% extends "main/layout.html"%} 
+
+{% block title %}
+SD MUSIC - Login
+{% endblock %} 
+
+{% block content %}
+
+<div class="container">
+    <div class = "row">
+        <div class="col-md-3 col-xs-0"></div>
+        <div class="col-md-6 col-xs-12">
+            <div class="well">
+                <h1 style="font-family: 'Rancho'; margin-left: 140px;">Welcome to SD Music!</h1>
+                <form action="{% url 'login' %}" method="post" id="login-form">{% csrf_token %}
+                  <div class="form-row" style="margin-left: 130px;">
+                    <label for="id_username" class="required"><h2 style="font-family: 'Rancho';">Username:</h2></label> <input id="id_username" type="text" name="username" maxlength="30">
+                  </div>
+                  <div class="form-row" style="margin-left: 130px;">
+                    <label for="id_password" class="required"><h2 style="font-family: 'Rancho';">Password:</h2></label> <input style="margin-left: 3px;" type="password" name="password" id="id_password">
+                  </div>
+                  <div class="submit-row" style="margin-left: 230px; margin-top: 10px; font-size: 25px; font-family: 'Rancho'">
+                    <label>&nbsp;</label><input type="submit" value="Login">
+                  </div>
+                </form>
+           
+            </div>
+            
+        </div>
+        <div class="col-md-3"></div>
+            
+    </div>
+</div>
+
+
+{% endblock %}

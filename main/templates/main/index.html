@@ -1,0 +1,139 @@
+{% extends "main/layout.html" %}
+{% load recommends %}
+
+{% block title %}
+성동이의 음악추천
+{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 col-xs-12 col-sm-8">
+      <div class="well well-lg">
+        {% suggested as suggestions limit 5  %}
+          <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">Recommendations for you:</h1>
+          {% if user.is_authenticated %}
+            
+            {% if suggestions %}
+              
+
+              <table class="table">
+
+              {% for suggestion in suggestions %}
+                <li><p><a style=" font-size: 30px; font-family: 'Rancho'; color: black;" href="{{suggestion.object.get_absolute_url}}">{{suggestion.object}}</a></p></li>
+              {% endfor %}
+              </table>
+            {% else %}
+              <h1 style="font-size: 30px; font-family: 'Rancho';">아직 정보가 없네요ㅠㅠ<br>별점을 매겨주세요!</h1>
+            {% endif %}
+            
+          {% else %}
+            <h1 style="font-size: 30px; font-family: 'Rancho';"><strong><a href="{% url 'loginForm' %}"> 추천목록을 보시려면 로그인하세요!</a></strong></h1>
+          {% endif %}
+      </div>
+    </div>
+      <div class="col-md-6 col-xs-12 col-sm-8">
+        <div class="well well-lg">
+        <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">New Song:</h1>
+        </div>
+      </div>
+    </div>
+  
+    
+    <div class="row">
+      {% for post in posts %}
+      <div class="well" id="post_{{post.pk}}">
+        <div class="row">
+        <div class="col-md-5">
+          <p><strong>{{post.author}}</strong>  {{post.created_date}}</p>
+            {% if post.photo %}
+                {% thumbnail post.photo "300x300" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+            {% endif %}
+        </div>
+        <div class="col-md-7">
+          {% if current_user == post.author %}
+          <button class="post_delete" style="color: black; margin-left: 5px; float: right;" value="{{post.pk}}"><span class="glyphicon glyphicon-trash"></span></button>
+          {% endif %}
+          <h2 style="font-family: 'Rancho';">아티스트 : {{post.artist}}</h2>
+          <h2 style="font-family: 'Rancho';">곡명 : {{post.songname}}</h2>
+          <div class="well">
+            <h2 style="font-family: 'Rancho';">{{post.title}}</h2>
+            <h3 style="font-family: 'Rancho';">{{post.text}}</h3>
+            <h2><a class="btn btn-primary btn-lg"  href = "{% url 'post_detail' pk=post.pk %}" style="background-color: #1ee6e6; float: right; font-family: 'Rancho';"><strong>Wonder</strong></a></h2>
+          </div>
+        </div>
+        </div>
+        
+
+      </div>
+      {% endfor %}
+    </div>
+</div>
+
+<script>
+
+
+$(function(){ // 인터넷 페이지가 로딩되면 이 js를 쓰겠다.
+
+  //reply_submit 이란 녀석이 클릭이 되면, 아래 코드를 돌린다.
+    $('.post_delete').click(function(){
+    post_id = this.value;
+    $.ajax({
+      method: "POST",
+      url: "{% url 'post_delete' %}",
+      data: {id_of_post: post_id, csrfmiddlewaretoken: '{{ csrf_token }}',},
+      success: function(){
+         $( "#post_" + post_id ).fadeOut( "fast", function() {
+            // Animation complete.
+          });
+      },
+      error: function(xhr, textStatus, error){
+      console.log(xhr.statusText);
+      console.log(textStatus);
+      console.log(error);
+      }
+    });
+    
+  });
+});
+
+$(function () {
+  
+  
+  $("#rateYo").rateYo({
+    starWidth: "40px",
+    halfStar: true,
+    rating: "{{voteRating}}",
+    onInit: function (rating, rateYoInstance) {
+ 
+      console.log("RateYo initialized! with " + rating);
+      console.log(post_id)
+    },
+     onSet: function (rating, rateYoInstance) {
+ 
+      $.ajax({
+      method: "POST",
+      url: "{% url 'new_rating' %}",
+      data: {post: "{{object.id}}", scoring: rating, csrfmiddlewaretoken: '{{ csrf_token }}',},
+      success: function(){
+        console.log("please...");  
+      },
+        error:function(request,status,error){
+             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+          }
+      
+    });
+    },
+
+    
+  });
+ 
+});
+
+
+
+</script>
+{% endblock %}

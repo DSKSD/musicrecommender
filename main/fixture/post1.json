@@ -1,0 +1,57 @@
+[
+     {
+        "pk": 1, 
+        "model": "main.post",
+        "fields": {
+            "author": 1,
+            "title": "When I feel I'm looser...",
+            "text": "No such thing as a life that's better than yours",
+            "photo": "/home/ubuntu/workspace/uploaded_files/jcole_foresthillsdrive.jpg",
+            "artist": "J.Cole",
+            "songname": "Love yourz",
+            "created_date": "2016-07-29 00:00:00",
+            "published_date": "2016-07-29 00:00:00",
+            "sites": [
+                1
+            ]
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "main.post",
+        "fields": {
+            "author": 1,
+            "title": "L$D",
+            "text": "I get a feelin' it's a trippy night",
+            "photo": "/uploads/a-ap-rocky_alla.jpg",
+            "artist": "A$AP Rocky",
+            "songname": "L$D",
+            "created_date": "2016-07-29 00:00:00",
+            "published_date": "2016-07-29 00:00:00",
+            "sites": [
+                1
+            ]
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "main.post",
+        "fields": {
+            "author": 1,
+            "title": "Now you know better",
+            "text": "loving,cheatin,people leaving, dying,living,losin and forgivng, growin,sayin no and,being who you are",
+            "photo": "/uploads/mondogrosso_mg4.jpg",
+            "artist": "Mondo Grosso",
+            "songname": "Now you know better",
+            "created_date": "2016-07-29 00:00:00",
+            "published_date": "2016-07-29 00:00:00",
+            "sites": [
+                1
+            ]
+        }
+    } 
+    
+    
+]
+    
+    

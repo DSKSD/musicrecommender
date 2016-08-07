@@ -1,0 +1,76 @@
+{% extends "main/layout.html" %}
+{% load recommends %}
+
+
+{% block content %}
+{% load thumbnail %}
+<div class="container">
+  <div class="well well-lg">
+    <div class="row">
+     <div class="col-md-5 col-xs-12">
+        <p><strong>{{object.author}}</strong>  {{object.created_date}}</p>
+            <p><h1>{{object.artist}} / {{object.songname}}</h1></p>  
+              {% if object.photo %}
+                  {% thumbnail object.photo "300x300" crop="center" as im %}
+                      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                  {% endthumbnail %}
+              {% endif %}
+      {% if user.is_authenticated %}        
+        <div style="margin-left: 40px;" id="rateYo"></div>
+      {% else %}
+        <h4 style="margin-left: 15px;"><strong><a href="{% url 'loginForm' %}"> 별점을 매기시려면 로그인하세요!</a></strong></h4>
+      {% endif %}
+     </div>
+     <div class="col-md-7 col-xs-12">
+       <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">You may like these too!</h1>
+      {% with object|similarities as similarities %} <!-- Product 모델의 인스턴스인 object를 view에서 받아오고 그 object에 관한 유사도 계산한 리스트를 similarities로 명명 -->
+        {% if similarities %} <!-- 만약 유사한 아이템들이 존재하면 -->
+        <table class="table">
+          {% for similarity in similarities %} <!-- 역시나 반복문을 돌며 유사한 아이템들을 출력한다 -->
+            <li><p style="font-size: 40px;  font-family: 'Rancho';"><a style="color: black;" href="{{similarity.related_object.get_absolute_url}}">{{similarity.related_object}}</a></p></li>
+              <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
+          {% endfor %}
+        </table>
+        {% endif %}
+      {% endwith %}
+    </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function () {
+  
+  
+  $("#rateYo").rateYo({
+    starWidth: "40px",
+    halfStar: true,
+    rating: "{{voteRating}}",
+    onInit: function (rating, rateYoInstance) {
+ 
+      console.log("RateYo initialized! with " + rating);
+    },
+     onSet: function (rating, rateYoInstance) {
+ 
+      $.ajax({
+      method: "POST",
+      url: "{% url 'new_rating' %}",
+      data: {post: '{{object.id}}', scoring: rating, csrfmiddlewaretoken: '{{ csrf_token }}',},
+      success: function(){
+        console.log("please...");  
+      },
+        error:function(request,status,error){
+             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+          }
+      
+    });
+    },
+
+    
+  });
+ 
+});
+
+
+</script>
+{% endblock %}

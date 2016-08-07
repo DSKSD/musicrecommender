@@ -1,0 +1,22 @@
+{% extends "main/layout.html"%} 
+
+{% block title %}
+You are Registered
+{% endblock %} 
+
+{% block content %}
+<div class = "container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+         <div class="well well-lg">
+            <div class="center">
+         <h2>회원가입 완료!</h2>  <button style="margin-left: 540px;" type="button" class="btn btn-info"><a style="color: white; font-size: 30px; " href="{% url 'loginForm' %}">로그인하기</a></button>
+         </div>
+         </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+</div>
+
+ {% endblock %}
