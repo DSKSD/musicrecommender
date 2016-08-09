@@ -10,6 +10,16 @@
 
 <!-- {{posts}} : 모든 포스팅 인스턴스들, {{current_user}} : 현재 유저 <request한 유저> -->
 <div class="container">
+  
+  <!-- 평점 제일 높은 동영상 띄우는 자리 -->
+  <div class="row" style="margin-top: 20px;">
+    <div class="well well-lg">
+      <!-- 유튜브 동영상 뜨는 자리 -->
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="{{posts.first.videourl}}"></iframe>
+      </div>
+    </div>
+  </div>
   <div class="row" style="margin-top: 20px;">
     <div class="col-md-6 col-xs-12 col-sm-8">
             
@@ -46,7 +56,20 @@
     <!-- 24시간 이내 새로 등록된 곡들 -->
     <div class="col-md-6 col-xs-12 col-sm-8">
       <div class="well well-lg">
-        <h1 style="font-size: 50px; color: #ee6e73;">New Song:</h1>
+        <h1 style="font-size: 40px; color: #ee6e73;">New Song:</h1>
+        <div class="slider">
+              <ul class="slides">
+                <!-- PRE_COMPUTED 명령으로 인해 개인화 추천이 존재하는 경우 썸네일 이미지 슬라이드로 출력한다! -->
+                {% for newthing in newthings %} <!-- suggestion attribute 中 object를 사용하여 실제 post에 접근한다 -->
+                    <li>
+                        <a href="{{newthing.get_absolute_url}}"><img src="{{newthing.get_thumb}}"/></a>
+                        <div class="caption center-align">
+                          <h2 style="font-family: 'Rancho'; color: white;">{{newthing.songname}}</h2>
+                        </div>
+                    </li>
+                {% endfor %}
+              </ul>
+            </div>  
       </div>
     </div>
   </div>
@@ -64,6 +87,12 @@
                         <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                     {% endthumbnail %}
                 {% endif %}
+                <!-- 평점 계산된게 있으면 그거 출력하고 아니면 Not Yet 출력하기 -->
+                {% if post.meanstar > 0.0 %}
+                  <h5 style="margin-left: 95px; color: #ee6e73; ">평점 : {{post.meanstar}}</h5>
+                {% else %}
+                  <h5 style="margin-left: 105px; color: #ee6e73; ">Not Yet</h5>
+                {% endif %}
             </div>
             <div class="col-md-7">
               {% if current_user == post.author %} <!-- 현재 로그인한 유저와 글쓴이가 같다면 삭제할 수 있도록 -->
@@ -77,7 +106,7 @@
                 <h2 style="font-family: 'Rancho';">{{post.title}}</h2>
                 <h3 style="font-family: 'Rancho';">{{post.text}}</h3>
                 <!-- 자세히 보기 버튼 -->
-                <h2><a class="btn btn-primary btn-lg"  href = "{% url 'post_detail' pk=post.pk %}" style="background-color: #1ee6e6; float: right; font-family: 'Rancho';"><strong>Wonder</strong></a></h2>
+                <h2><a class="btn btn-primary btn-lg"  href = "{% url 'post_detail' pk=post.pk %}" style="background-color: #ee6e73; float: right; font-family: 'Rancho';"><strong>Wonder</strong></a></h2>
               </div>
             </div>
           </div>
@@ -115,40 +144,6 @@ $(function(){ // 인터넷 페이지가 로딩되면 이 js를 쓰겠다.
     
   });
 });
-
-$(function () {
-  
-  
-  $("#rateYo").rateYo({
-    starWidth: "40px",
-    halfStar: true,
-    rating: "{{voteRating}}",
-    onInit: function (rating, rateYoInstance) {
- 
-      console.log("RateYo initialized! with " + rating);
-      console.log(post_id)
-    },
-     onSet: function (rating, rateYoInstance) {
- 
-      $.ajax({
-      method: "POST",
-      url: "{% url 'new_rating' %}",
-      data: {post: "{{object.id}}", scoring: rating, csrfmiddlewaretoken: '{{ csrf_token }}',},
-      success: function(){
-        console.log("please...");  
-      },
-        error:function(request,status,error){
-             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-          }
-      
-    });
-    },
-
-    
-  });
- 
-});
-
 
 
 // Pause slider

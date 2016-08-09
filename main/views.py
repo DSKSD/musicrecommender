@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as _login
 from django.http import HttpResponseRedirect
 from .models import Post, Vote
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.utils import timezone
 # Create your views here.
 
 # 회원가입 및 로그인 구현 부분 
@@ -41,9 +41,9 @@ def loggedin(request):
 
 def index(request):
     user = request.user
-    posts = Post.objects.all().order_by('-published_date')
-    
-    context = {'posts' : posts, 'current_user' : user,}
+    posts = Post.objects.all().order_by('-meanstar') # 평균 별점에 내림차순으로 정렬
+    newthings = Post.objects.all().order_by('-published_date')[:5] # 등록된 순으로 5개 뽑음
+    context = {'posts' : posts, 'current_user' : user, 'newthings' : newthings,}
     return render(request, 'main/index.html', context)
 
 # 자세히 보기 {자세히 보려는 Post , 별점 정보, 현재 유저 }

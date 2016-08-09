@@ -19,6 +19,7 @@ class Post(models.Model):
     videourl = models.CharField(max_length=300, null=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+    meanstar = models.FloatField(default=0.0)
     sites = models.ManyToManyField(Site)
     
 
