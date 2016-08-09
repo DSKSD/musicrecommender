@@ -1,18 +1,25 @@
 {% extends "main/layout.html" %}
-{% load recommends %}
+{% load recommends %} <!-- 레코맨더 -->
 
+{% block title %}
+성동이의 음악추천
+{% endblock %}
 
 {% block content %}
-{% load thumbnail %}
+{% load thumbnail %} <!-- 썸네일 -->
+<!-- {{object}} : 자세히 보고 싶은 포스팅, {{current_user}} : 현재 유저 , {{voteRating}} : 이 포스팅의 현재 별점 (rateYo 초기화 함수에 변수로 사용)-->
+
 <div class="container">
-  <div class="well well-lg">
+  <div class="well well-lg" style="margin-top: 20px;">
     <div class="row">
+      <!-- 유튜브 동영상 뜨는 자리 -->
       <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="{{object.videourl}}"></iframe>
       </div>
     </div>
     <div class="row">
-     <div class="col-md-5 col-xs-12">
+      <!-- 곡 제목/ 가수 이미지 썸네일 출력 -->
+      <div class="col-md-5 col-xs-12">
         <p><strong>{{object.author}}</strong>  {{object.created_date}}</p>
             <p><h1>{{object.artist}} / {{object.songname}}</h1></p>  
               {% if object.photo %}
@@ -20,25 +27,27 @@
                       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                   {% endthumbnail %}
               {% endif %}
+      <!-- 만약 로그인된 상태라면 별점 매길 수 있도록 한다 -->
       {% if user.is_authenticated %}        
         <div style="margin-left: 40px;" id="rateYo"></div>
+      <!-- 로그인이 안되어 있으면 아래 텍스트 출력 -->
       {% else %}
         <h4 style="margin-left: 15px;"><strong><a href="{% url 'loginForm' %}"> 별점을 매기시려면 로그인하세요!</a></strong></h4>
       {% endif %}
-     </div>
-     <div class="col-md-7 col-xs-12">
-       <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">You may like these too!</h1>
-      {% with object|similarities as similarities %} <!-- Product 모델의 인스턴스인 object를 view에서 받아오고 그 object에 관한 유사도 계산한 리스트를 similarities로 명명 -->
-        {% if similarities %} <!-- 만약 유사한 아이템들이 존재하면 -->
-        <table class="table">
-          {% for similarity in similarities %} <!-- 역시나 반복문을 돌며 유사한 아이템들을 출력한다 -->
-            <li><p style="font-size: 40px;  font-family: 'Rancho';"><a style="color: black;" href="{{similarity.related_object.get_absolute_url}}">{{similarity.related_object}}</a></p></li>
-              <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
-          {% endfor %}
-        </table>
-        {% endif %}
-      {% endwith %}
-    </div>
+      </div>
+      <div class="col-md-7 col-xs-12">
+        <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">You may like these too!</h1>
+        {% with object|similarities as similarities %} <!-- Product 모델의 인스턴스인 object를 view에서 받아오고 그 object에 관한 유사도 계산한 리스트를 similarities로 명명 -->
+          {% if similarities %} <!-- 만약 유사한 아이템들이 존재하면 -->
+            <table class="table">
+              {% for similarity in similarities %} <!-- 역시나 반복문을 돌며 유사한 아이템들을 출력한다 -->
+                <li><p style="font-size: 40px;  font-family: 'Rancho';"><a style="color: black;" href="{{similarity.related_object.get_absolute_url}}">{{similarity.related_object}}</a></p></li>
+                <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
+              {% endfor %}
+            </table>
+          {% endif %}
+        {% endwith %}
+      </div>
     </div>
   </div>
 </div>
@@ -47,14 +56,16 @@
 $(function () {
   
   
-  $("#rateYo").rateYo({
-    starWidth: "40px",
-    halfStar: true,
-    rating: "{{voteRating}}",
+  $("#rateYo").rateYo({ // id가 rateYo인 태그가 눌리면 실행한다.. 
+    starWidth: "40px", // 별점 매기기의 기본적 속성 정의 (별의 크기)
+    halfStar: true, // (별 반개 주기 허용 0.5점)
+    rating: "{{voteRating}}", // rating에는 view에서 끌어온 voteRating 변수를 할당한다 (매긴적이 있으면 그 점수를 아니면 0을)
+    // 초기화 함수 !
     onInit: function (rating, rateYoInstance) {
  
       console.log("RateYo initialized! with " + rating);
     },
+    // 별점 매기기 함수 AJAX로 new_rating으로 쏜다!
      onSet: function (rating, rateYoInstance) {
  
       $.ajax({

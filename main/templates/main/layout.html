@@ -4,42 +4,59 @@
   <title>{% block title %}{% endblock %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 부트스트랩 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <!-- AJAX -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <!-- 구글 폰트 -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine&effect=neon">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Rancho&effect=shadow-multiple">
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+  <!-- rateYo cdn -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.1.1/jquery.rateyo.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.1.1/jquery.rateyo.min.js"></script>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <style>
      body {
         font-family: 'nanumgothic';
       }
   </style>
+
+
 </head>
 <body style="background-color: gray;">
+  
   <div class="container">
+    <!-- 헤더 위에 각종 정보 띄워서 보여줄 공간 -->
     <div class="row">
+      {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
+        <h6 style="margin-top: 10px; color: white; margin-left: 10px;">{{current_user}}님 안녕하세요.</h4>
+      {% endif %}
       <div class="right">
-        {% if user.is_authenticated %}
-          <h4 style="margin-top: 10px; color: white; margin-left: 950px;">{{current_user}}님 안녕하세요.</h4>
+        <a href="{% url 'registerForm' %}" style =" margin-top: 10px; margin-left: 950px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
+        <a href="{% url 'loginForm' %}" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
+        {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
+          <a href="/accounts/logout" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
+          
         {% endif %}
       </div>
     </div>
-    <div class="row">
-    <div class="page-header" style="background-color: #1ee6e6;">
-      <a style="text-decoration: none;" href="{% url 'index' %}"><div class="font-effect-shadow-multiple"><h1 style="margin-top: 10px; color: white; margin-left: 10px; font-size: 200px; font-family: 'Rancho';">SD music</h1></div></a>
-      
-      <div class="right">
-        <a href="{% url 'registerForm' %}" style ="margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
-        <a href="{% url 'loginForm' %}" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
-        {% if user.is_authenticated %}
-        <a href="/accounts/logout" style= "margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
-        {% endif %}
+    
+    <nav>
+      <div class="nav-wrapper">
+        <a href="{% url 'index' %}" class="brand-logo" style="font-size: 50px;">SD MUSIC</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="{% url 'index' %}">Main</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Digging</a></li>
+        </ul>
       </div>
-    </div>
-    </div>
+    </nav>
+    
   </div>
     {% block content %}{% endblock %}
 </body>
