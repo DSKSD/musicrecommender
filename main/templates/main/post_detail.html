@@ -24,7 +24,7 @@
             <p><h1>{{object.artist}} / {{object.songname}}</h1></p>  
               {% if object.photo %}
                   {% thumbnail object.photo "300x300" crop="center" as im %}
-                      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                      <img class="responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                   {% endthumbnail %}
               {% endif %}
       <!-- 만약 로그인된 상태라면 별점 매길 수 있도록 한다 -->

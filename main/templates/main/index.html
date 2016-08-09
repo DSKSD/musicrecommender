@@ -8,15 +8,15 @@
 {% block content %}
 {% load thumbnail %} <!-- 썸네일 -->
 
-<!-- {{posts}} : 모든 포스팅 인스턴스들, {{current_user}} : 현재 유저 <request한 유저> -->
+<!-- {{posts}} : 모든 포스팅 인스턴스들, {{current_user}} : 현재 유저 <request한 유저> , {{newthings}} : 가장 최근에 등록된 포스트 5개-->
 <div class="container">
   
   <!-- 평점 제일 높은 동영상 띄우는 자리 -->
   <div class="row" style="margin-top: 20px;">
     <div class="well well-lg">
       <!-- 유튜브 동영상 뜨는 자리 -->
-      <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="{{posts.first.videourl}}"></iframe>
+      <div class="video-container">
+        <iframe width="853" height="480" src="{{newthings.first.videourl}}" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@
       <!-- 개인화 추천 뜨는 곳 -->
       <div class="well well-lg">
         {% suggested as suggestions limit 5  %}
-          <h1 style="font-size: 40px; color: #ee6e73;">Recommendations for you:</h1>
+          <h1>Recommendations for you:</h1>
           {% if user.is_authenticated %} <!-- 로그인이 되어 있다면! -->
             <!-- 이미지 슬라이더 !! -->
             <div class="slider">
@@ -35,7 +35,7 @@
                 {% if suggestions %} 
                   {% for suggestion in suggestions %} <!-- suggestion attribute 中 object를 사용하여 실제 post에 접근한다 -->
                     <li>
-                        <a href="{{suggestion.object.get_absolute_url}}"><img src="{{suggestion.object.get_thumb}}"/></a>
+                        <a href="{{suggestion.object.get_absolute_url}}"><img class="responsive-img" src="{{suggestion.object.get_thumb}}"/></a>
                         <div class="caption center-align">
                           <h2 style="font-family: 'Rancho'; color: white;">{{suggestion.object.songname}}</h2>
                         </div>
@@ -45,11 +45,11 @@
             </div>  
             
                 {% else %} <!-- 추천 목록이 아직 존재하지 않으면 Rating (Vote) 관련 정보가 없어서 그런 것이니 아래 텍스트를 출력한다 -->
-                  <h1 style="font-size: 30px; font-family: 'Rancho';">아직 정보가 없네요ㅠㅠ<br>별점을 매겨주세요!</h1>
+                  <h1>아직 정보가 없네요ㅠㅠ<br>별점을 매겨주세요!</h1>
                 {% endif %}
             
           {% else %} <!-- 로그인 안되어 있으면 아래 텍스트 출력 -->
-            <h1 style="font-size: 30px; font-family: 'Rancho';"><strong><a href="{% url 'loginForm' %}"> 추천목록을 보시려면 로그인하세요!</a></strong></h1>
+            <h1><strong><a href="{% url 'loginForm' %}"> 추천목록을 보시려면 로그인하세요!</a></strong></h1>
           {% endif %}
       </div>
     </div>
@@ -62,7 +62,7 @@
                 <!-- PRE_COMPUTED 명령으로 인해 개인화 추천이 존재하는 경우 썸네일 이미지 슬라이드로 출력한다! -->
                 {% for newthing in newthings %} <!-- suggestion attribute 中 object를 사용하여 실제 post에 접근한다 -->
                     <li>
-                        <a href="{{newthing.get_absolute_url}}"><img src="{{newthing.get_thumb}}"/></a>
+                        <a href="{{newthing.get_absolute_url}}"><img class="responsive-img" src="{{newthing.get_thumb}}"/></a>
                         <div class="caption center-align">
                           <h2 style="font-family: 'Rancho'; color: white;">{{newthing.songname}}</h2>
                         </div>
@@ -84,7 +84,7 @@
               <p><strong>{{post.author}}</strong>  {{post.created_date}}</p>
                 {% if post.photo %}<!-- 사진까지 업로드 했다면,,이지만 나중에 업로드 기능을 구현하면 사진은 강제로 넣게 해야할듯? -->
                     {% thumbnail post.photo "300x300" crop="center" as im %} <!-- 사진이 있으면 그 아이를 300x300 크기의 썸네일로 만들어서 im으로 다룬다 -->
-                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        <img class="responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                     {% endthumbnail %}
                 {% endif %}
                 <!-- 평점 계산된게 있으면 그거 출력하고 아니면 Not Yet 출력하기 -->
@@ -99,8 +99,8 @@
                 <button class="post_delete" style="color: black; margin-left: 5px; float: right;" value="{{post.pk}}"><span class="glyphicon glyphicon-trash"></span></button>
               {% endif %}
               <!-- 노래 정보 출력-->
-              <h2 style="font-family: 'Rancho';">아티스트 : {{post.artist}}</h2>
-              <h2 style="font-family: 'Rancho';">곡명 : {{post.songname}}</h2>
+              <h2>아티스트 : {{post.artist}}</h2>
+              <h2>곡명 : {{post.songname}}</h2>
               <!-- 포스팅 내용 출력 (제목과 좋아하는 가사 ) -->
               <div class="well">
                 <h2 style="font-family: 'Rancho';">{{post.title}}</h2>

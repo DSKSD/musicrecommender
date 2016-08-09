@@ -9,27 +9,27 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
           <div class="well well-lg">
-            <div align="center">
+            <div class="center">
                <h2>회원가입</h2>
-            </div>
+            
            <form action="/accounts/register/" method="POST">{% csrf_token %}
-             <div class="form-row" style="margin-left: 200px;">
+             <div class="form-row">
               <label for="id_username"><h2 style="font-family: 'Rancho';">Username:</h2></label> 
               <input style="margin-left: 2px;" id="id_username" type="text" name="username" maxlength="100" required />
              </div>
-             <div class="form-row" style="margin-left: 200px;">
+             <div class="form-row">
                <label for="id_password1"><h2 style="font-family: 'Rancho';">Password:</h2></label>
                <input style="margin-left: 5px;" type="password" name="password1" id="id_password1" required/>
              </div>
-             <div class="form-row" style="margin-left: 200px;">  
+             <div class="form-row">  
              <label for="id_password2"><h2 style="font-family: 'Rancho';">Confirm:</h2></label>
                 <input style="margin-left: 20px;" type="password" name="password2" id="id_password2" required />
              </div>
-             <div class="submit-row" style="margin-left: 300px; margin-top: 10px; font-size: 25px; font-family: 'Rancho'">
+             <div class="submit-row" style=" margin-top: 10px; font-size: 25px; font-family: 'Rancho'">
                     <label>&nbsp;</label><input type="submit" value="Register">
              </div>
            </form>
-           
+           </div>
       </div>
       </div>
       <div class="col-md-2"></div>

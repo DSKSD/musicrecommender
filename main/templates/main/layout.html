@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 <head>
   <title>{% block title %}{% endblock %}</title>
   <meta charset="utf-8">
+  <link rel="shorcut icon" type ="image/x-icon" href="{% static 'image/boaz.jpg' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- 부트스트랩 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -21,8 +23,19 @@
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <style>
-     body {
-        font-family: 'nanumgothic';
+      body {
+         font-family: 'nanumgothic';
+       }
+      
+      h1 {
+         font-size: 40px; 
+         font-size: 2rem;
+         color: #ee6e73;
+      }
+     
+      .well h2, .well h3 {
+        font-family: 'Rancho';
+        font-size: 2rem;
       }
   </style>
 
@@ -37,7 +50,7 @@
         <h6 style="margin-top: 10px; color: white; margin-left: 10px;">{{current_user}}님 안녕하세요.</h4>
       {% endif %}
       <div class="right">
-        <a href="{% url 'registerForm' %}" style =" margin-top: 10px; margin-left: 950px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
+        <a href="{% url 'registerForm' %}" style =" margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
         <a href="{% url 'loginForm' %}" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
         {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
           <a href="/accounts/logout" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
@@ -59,5 +72,30 @@
     
   </div>
     {% block content %}{% endblock %}
+   <footer class="page-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">SD MUSIC</h5>
+                <p class="grey-text text-lighten-4">당신의 취향을 저격합니다</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2016 Copyright 킹성동
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>
 </body>
 </html>
