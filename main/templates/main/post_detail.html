@@ -10,51 +10,69 @@
 <!-- {{object}} : 자세히 보고 싶은 포스팅, {{current_user}} : 현재 유저 , {{voteRating}} : 이 포스팅의 현재 별점 (rateYo 초기화 함수에 변수로 사용)-->
 
 <div class="container">
-  <div class="well well-lg" style="margin-top: 20px;">
-    <div class="row">
+  <div class="row">
+    <div class="card blue lighten-5">
       <!-- 유튜브 동영상 뜨는 자리 -->
       <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="{{object.videourl}}"></iframe>
       </div>
     </div>
-    <div class="row">
-      <!-- 곡 제목/ 가수 이미지 썸네일 출력 -->
-      <div class="col-md-5 col-xs-12">
-        <p><strong>{{object.author}}</strong>  {{object.created_date}}</p>
-            <p><h1>{{object.artist}} / {{object.songname}}</h1></p>  
-              {% if object.photo %}
-                  {% thumbnail object.photo "300x300" crop="center" as im %}
-                      <img class="responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                  {% endthumbnail %}
-              {% endif %}
-      <!-- 만약 로그인된 상태라면 별점 매길 수 있도록 한다 -->
-      {% if user.is_authenticated %}        
-        <div style="margin-left: 40px;" id="rateYo"></div>
-      <!-- 로그인이 안되어 있으면 아래 텍스트 출력 -->
-      {% else %}
-        <h4 style="margin-left: 15px;"><strong><a href="{% url 'loginForm' %}"> 별점을 매기시려면 로그인하세요!</a></strong></h4>
-      {% endif %}
-      </div>
-      <div class="col-md-7 col-xs-12">
-        <h1 style="font-size: 50px; font-family: 'Rancho'; color: #1ee6e6;">You may like these too!</h1>
-        {% with object|similarities as similarities %} <!-- Product 모델의 인스턴스인 object를 view에서 받아오고 그 object에 관한 유사도 계산한 리스트를 similarities로 명명 -->
-          {% if similarities %} <!-- 만약 유사한 아이템들이 존재하면 -->
-            <table class="table">
-              {% for similarity in similarities %} <!-- 역시나 반복문을 돌며 유사한 아이템들을 출력한다 -->
-                <li><p style="font-size: 40px;  font-family: 'Rancho';"><a style="color: black;" href="{{similarity.related_object.get_absolute_url}}">{{similarity.related_object}}</a></p></li>
-                <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
-              {% endfor %}
-            </table>
+    <div class="card blue lighten-5">
+      <div class="row">
+        <!-- 곡 제목/ 가수 이미지 썸네일 출력 -->
+        <div class="col l5 m5 s12 item-detail">
+            <p><strong>{{object.author}}</strong>  {{object.created_date}}</p>
+                <p><h1>{{object.artist}} / {{object.songname}}</h1></p>  
+                  {% if object.photo %}
+                      {% thumbnail object.photo "300x300" crop="center" as im %}
+                          <img class="responsive-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                      {% endthumbnail %}
+                  {% endif %}
+          <!-- 만약 로그인된 상태라면 별점 매길 수 있도록 한다 -->
+          {% if user.is_authenticated %}        
+            <div style="margin-left: 40px;" id="rateYo"></div>
+          <!-- 로그인이 안되어 있으면 아래 텍스트 출력 -->
           {% else %}
-            <h3>아직은 알 수 없어요 ㅠㅠ</h3>
+            <h4 style="margin-left: 15px;"><strong><a href="{% url 'loginForm' %}"> 별점을 매기시려면 로그인하세요!</a></strong></h4>
           {% endif %}
-        {% endwith %}
-      </div>
+          </div>
+          <div class="col l7 m7 s12 item-detail">
+            <h1 class="center">You may like these too!</h1>
+            {% with object|similarities as similarities %} <!-- Product 모델의 인스턴스인 object를 view에서 받아오고 그 object에 관한 유사도 계산한 리스트를 similarities로 명명 -->
+              {% if similarities %} <!-- 만약 유사한 아이템들이 존재하면 -->
+                <ul class="collapsible popout" data-collapsible="accordion">
+                  {% for similarity in similarities %} <!-- 역시나 반복문을 돌며 유사한 아이템들을 출력한다 -->
+                    <li>
+                      <div class="collapsible-header waves-effect waves-block waves-teal"><p><img class="responsive-img circle" src="{{similarity.related_object.get_thumb}}">   {{similarity.related_object.songname}}</p></div>
+                      <div class="collapsible-body">
+                        <p>{{similarity.related_object.author}}<br>
+                            {{similarity.related_object.text}}<br>
+                            <a class="right" style="color: black;" href="{{similarity.related_object.get_absolute_url}}"><i class="material-icons">sentiment_satisfied</i></a></p>
+                      </div>
+                      <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
+                    </li>
+                  {% endfor %}
+                  
+                </ul>
+                  {% else %}
+                    <h3>아직은 알 수 없어요 ㅠㅠ</h3>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
     </div>
-  </div>
+  </div>  
 </div>
 
 <script>
+
+  $(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+
+
 $(function () {
   
   

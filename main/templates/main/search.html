@@ -1,0 +1,38 @@
+{% extends "main/layout.html" %}
+{% load staticfiles %}
+
+{% block title %}
+{{query}} 검색 결과
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <h1><strong>{{query}}</strong> 검색결과 입니다!</h1>
+            {% if objects %}
+                <ul class="collapsible popout" data-collapsible="accordion">
+                {% for object in objects %}
+                    <li>
+                        <div class="collapsible-header waves-effect waves-block waves-teal"><p><img class="responsive-img circle" src="{{object.get_thumb}}">   {{object.songname}}</p></div>
+                        <div class="collapsible-body">
+                            <p>{{object.author}}<br>
+                            {{object.text}}<br>
+                            <a class="right" style="color: black;" href="{{similarity.related_object.get_absolute_url}}"><i class="material-icons">sentiment_satisfied</i></a></p>
+                        </div>
+                          <!-- 역시 similarity 역시 djangoORM 모델이고 related_object는 컬럼 이름 -->
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <div class="center">
+                    <img class="responsive-img circle" src="{% static 'image/boaz.jpg' %}"><br>
+                    <h1>검색 결과가 없어요 ㅠㅠ</h1>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

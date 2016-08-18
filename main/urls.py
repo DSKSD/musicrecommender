@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^newRating/$', views.newRating, name='new_rating'), # 별점 매기기 요청
     url(r'^loginForm/$', TemplateView.as_view(template_name='registration/login.html'), name='loginForm'), # 로그인 페이지 이동
     url(r'^registerForm/$', TemplateView.as_view(template_name='registration/registration_form.html'), name='registerForm'), # 회원가입 페이지 이동
+    url(r'^search/$', views.query, name='search'),
+    
 ]
 
 if settings.DEBUG: # 개발 단계에서는 아래 Media url을 사용하겠다..!! 서비스 단에서는 S3 사용하고

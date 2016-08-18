@@ -22,57 +22,174 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  <!--구글 아이콘들 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <style>
       body {
          font-family: 'nanumgothic';
        }
       
-      h1 {
-         font-size: 40px; 
+      .main-recomm h1 {
+         font-size: 60px; 
          font-size: 2rem;
-         color: #ee6e73;
+         color: #0091ea;
+      }
+      
+      .item-detail h1 {
+        font-size: 2rem;
+        color: #0091ea;
       }
      
-      .well h2, .well h3 {
+     .card h1 {
+       font-size: 60px; 
+       font-size: 2rem;
+       color: #0091ea;
+     }
+     
+      .card h2, .card h3 {
         font-family: 'Rancho';
         font-size: 2rem;
       }
+      
+      .container {width:100%; margin-right:auto; margin-left:auto;}
+      
+      video{
+        max-width:100%;
+        height:auto;
+      }
+      
+      .card{padding: 20px;}
+      
+      .input-field label {
+         color: #ffffff;
+       }
+       
+       /* label focus color */
+       .input-field input[type=text]:focus + label {
+         color: #ffffff;
+       }
+       
+       /* icon prefix focus color */
+       .input-field .prefix.active {
+         color: #ffffff;
+       }
+       
+       /* label underline focus color */
+       .input-field input[type=text]:focus {
+         border-bottom: 1px solid #ffffff;
+         box-shadow: 0 1px 0 0 #ffffff;
+       }
+      
+      form {
+        display: inline-block;
+        line-height: 0;
+    }
   </style>
 
 
 </head>
 <body style="background-color: gray;">
   
-  <div class="container">
-    <!-- 헤더 위에 각종 정보 띄워서 보여줄 공간 -->
-    <div class="row">
-      {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
-        <h6 style="margin-top: 10px; color: white; margin-left: 10px;">{{current_user}}님 안녕하세요.</h4>
-      {% endif %}
-      <div class="right">
-        <a href="{% url 'registerForm' %}" style =" margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-plus"></span></a>
-        <a href="{% url 'loginForm' %}" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-user"></span></a>
-        {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
-          <a href="/accounts/logout" style= " margin-top: 10px; margin-left: 10px; color: white; font-size: 25pt;"><span class="glyphicon glyphicon-remove"></span></a>
-          
-        {% endif %}
-      </div>
-    </div>
+        <nav class="main">
+          <div class="nav-wrapper light-blue accent-4">
+            
+            <a href="#" data-activates="mobile-demo" class="button-collapse menu-slider"><i class="material-icons">menu</i></a>
+            <a href="#" class="search-mobile right button-collapse"><i class="material-icons">&#xE8B6;</i></a>
+            <div class="search-box-mobile button-collapse">
+              <div class="search-container">
+                  <form action="{% url 'search' %}" method="get">
+                    <input name="query" type="text" placeholder="검색"/>
+                    <i id ="search-de-mobile" class="material-icons">&#xE5CD;</i>
+                    <input class='submit hide' type="submit"/>
+
+                  </form>
+              </div>
+            </div>
+            
+            <div class="container">
+            <a href="{% url 'index' %}" class="brand-logo waves-effect waves-block" style="font-size: 50px;">SD MUSIC</a>
+            
+            
+            <ul class="right hide-on-med-and-down">
+              
+              <li class="category-item">
+                <div class="search-container">
+                  <form action="{% url 'search' %}" method="get">
+                    <div class="input-field"> 
+                      <i class="material-icons prefix">&#xE8B6;</i>
+                      <input name="query" id="icon_prefix" type="text" class="validate">
+                      <label for="icon_prefix">검색</label>
+                      <input class='submit hide' type="submit"/>
+                    </div>
+                  </form>
+                </div>
+              </li>
+              
+              <li><a href="{% url 'index' %}">Main</a></li>
+              <li><a href="#">Profile</a></li>
+              <li><a href="#">Digging</a></li>
+              
+              
+              <li class="category-item waves-effect waves-block">
+                <a class="all" href="{% url 'registerForm' %}">회원가입</a></li>
     
-    <nav>
-      <div class="nav-wrapper">
-        <a href="{% url 'index' %}" class="brand-logo" style="font-size: 50px;">SD MUSIC</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="{% url 'index' %}">Main</a></li>
-          <li><a href="#">Profile</a></li>
-          <li><a href="#">Digging</a></li>
-        </ul>
-      </div>
-    </nav>
+              
+              {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
+              <li class="category-item waves-effect waves-block">
+                <a href="/accounts/logout">로그아웃</a></li>
+                
+              {% else %}
+              <li class="category-item waves-effect waves-block">
+                <a href="{% url 'loginForm' %}">로그인</a></li>
+              
+              {% endif %}
+            
+
+            </ul>
+            
+            <ul class="side-nav" id="mobile-demo">
+              <li class="waves-effect waves-block waves-red"><a href="{% url 'index' %}">메인</a></li>
+              <li class="waves-effect waves-block waves-red"><a href="{% url 'registerForm' %}">회원가입</a></li>
+              {% if user.is_authenticated %} <!-- 로그인되어있는 경우에만 로그아웃 버튼 누를 수 있도록~ -->
+                <li class="waves-effect waves-block waves-red"><a href="/accounts/logout">로그아웃</a></li>
+              {% else %}
+                <li class="waves-effect waves-block waves-red"><a href="{% url 'loginForm' %}">로그인</a></li>
+              {% endif %}
+            </ul>
+
+            </div>
+          </div>
+        </nav>
+        
     
-  </div>
+<script>
+  $(".search-box-mobile").hide();
+  $(".menu-slider").sideNav(); // 모바일일 때 메뉴들은 소멸하고 sideNav가 등장한다 (Initialize)
+  
+  $(".search-mobile").click(function(){
+     $(".brand-logo").fadeOut( "fast", function() {
+    // Animation complete
+    });
+    $(".search-box-mobile").fadeIn( "fast", function() {
+    // Animation complete
+    });
+    
+  });
+  
+  $("#search-de-mobile").click(function(){
+     $(".search-box-mobile").fadeOut( "fast", function() {
+    // Animation complete
+    });
+    $(".brand-logo").fadeIn( "fast", function() {
+    // Animation complete
+    });
+    
+  });
+</script>
+  
     {% block content %}{% endblock %}
-   <footer class="page-footer">
+   <footer class="page-footer light-blue accent-4">
           <div class="container">
             <div class="row">
               <div class="col l6 s12">

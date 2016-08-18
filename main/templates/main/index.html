@@ -9,77 +9,50 @@
 {% load thumbnail %} <!-- 썸네일 -->
 
 <!-- {{posts}} : 모든 포스팅 인스턴스들, {{current_user}} : 현재 유저 <request한 유저> , {{newthings}} : 가장 최근에 등록된 포스트 5개-->
-<div class="container">
+<div class="container no-margin">
   
   <!-- 평점 제일 높은 동영상 띄우는 자리 -->
-  <div class="row" style="margin-top: 20px;">
-    <div class="well well-lg">
+  <div class="row">
+    <div class="card">
       <!-- 유튜브 동영상 뜨는 자리 -->
       <div class="video-container">
         <iframe width="853" height="480" src="{{newthings.first.videourl}}" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
-  </div>
-  <div class="row" style="margin-top: 20px;">
-    <div class="col-md-6 col-xs-12 col-sm-8">
-            
       <!-- 개인화 추천 뜨는 곳 -->
-      <div class="well well-lg">
+      <div class="card main-recomm">
         {% suggested as suggestions limit 5  %}
-          <h1>Recommendations for you:</h1>
+          <div class="card-content white-text">
+              <span class="card-title"><h1>Recommendations for you:</h1></span>
+          
           {% if user.is_authenticated %} <!-- 로그인이 되어 있다면! -->
-            <!-- 이미지 슬라이더 !! -->
-            <div class="slider">
-              <ul class="slides">
-                <!-- PRE_COMPUTED 명령으로 인해 개인화 추천이 존재하는 경우 썸네일 이미지 슬라이드로 출력한다! -->
-                {% if suggestions %} 
-                  {% for suggestion in suggestions %} <!-- suggestion attribute 中 object를 사용하여 실제 post에 접근한다 -->
-                    <li>
-                        <a href="{{suggestion.object.get_absolute_url}}"><img class="responsive-img" src="{{suggestion.object.get_thumb}}"/></a>
-                        <div class="caption center-align">
-                          <h2 style="font-family: 'Rancho'; color: white;">{{suggestion.object.songname}}</h2>
-                        </div>
-                    </li>
+          
+            <div class="carousel">
+              {% if suggestions %} 
+                  {% for suggestion in suggestions %}
+                    <a class="carousel-item" href="{{suggestion.object.get_absolute_url}}"><img class="responsive-img" src="{{suggestion.object.photo.url}}"></a>
                   {% endfor %}
-              </ul>
+            </div>
+          
+              {% else %} <!-- 추천 목록이 아직 존재하지 않으면 Rating (Vote) 관련 정보가 없어서 그런 것이니 아래 텍스트를 출력한다 -->
+                <div class="center">
+                  <h2>아직 정보가 없네요ㅠㅠ<br> 별점을 매겨주세요!</h2>
+                </div>
+              {% endif %}
             </div>  
-            
-                {% else %} <!-- 추천 목록이 아직 존재하지 않으면 Rating (Vote) 관련 정보가 없어서 그런 것이니 아래 텍스트를 출력한다 -->
-                  <h1>아직 정보가 없네요ㅠㅠ<br>별점을 매겨주세요!</h1>
-                {% endif %}
             
           {% else %} <!-- 로그인 안되어 있으면 아래 텍스트 출력 -->
             <h1><strong><a href="{% url 'loginForm' %}"> 추천목록을 보시려면 로그인하세요!</a></strong></h1>
           {% endif %}
-      </div>
-    </div>
-    <!-- 24시간 이내 새로 등록된 곡들 -->
-    <div class="col-md-6 col-xs-12 col-sm-8">
-      <div class="well well-lg">
-        <h1 style="font-size: 40px; color: #ee6e73;">New Song:</h1>
-        <div class="slider">
-              <ul class="slides">
-                <!-- PRE_COMPUTED 명령으로 인해 개인화 추천이 존재하는 경우 썸네일 이미지 슬라이드로 출력한다! -->
-                {% for newthing in newthings %} <!-- suggestion attribute 中 object를 사용하여 실제 post에 접근한다 -->
-                    <li>
-                        <a href="{{newthing.get_absolute_url}}"><img class="responsive-img" src="{{newthing.get_thumb}}"/></a>
-                        <div class="caption center-align">
-                          <h2 style="font-family: 'Rancho'; color: white;">{{newthing.songname}}</h2>
-                        </div>
-                    </li>
-                {% endfor %}
-              </ul>
-            </div>  
-      </div>
-    </div>
-  </div>
+          </div>
+
     <!-- 타임라인인데 시간 내림차순으로 하지말고 평균 Rating 높은 순으로 수정하기 -->
-    <div class="row">
+
       
       {% for post in posts %}
-        <div class="well" id="post_{{post.pk}}">
+        <div class="card" id="post_{{post.pk}}">
           <div class="row">
-            <div class="col-md-5">
+            <div class="col l5 m5 s12">
               <!-- 글쓴이 정보와 썸네일 출력-->
               <p><strong>{{post.author}}</strong>  {{post.created_date}}</p>
                 {% if post.photo %}<!-- 사진까지 업로드 했다면,,이지만 나중에 업로드 기능을 구현하면 사진은 강제로 넣게 해야할듯? -->
@@ -89,12 +62,12 @@
                 {% endif %}
                 <!-- 평점 계산된게 있으면 그거 출력하고 아니면 Not Yet 출력하기 -->
                 {% if post.meanstar > 0.0 %}
-                  <h5 style="margin-left: 95px; color: #ee6e73; ">평점 : {{post.meanstar}}</h5>
+                  <h5 style="margin-left: 95px; color: #0091ea ">평점 : {{post.meanstar}}</h5>
                 {% else %}
-                  <h5 style="margin-left: 105px; color: #ee6e73; ">Not Yet</h5>
+                  <h5 style="margin-left: 105px; color: #0091ea ">Not Yet</h5>
                 {% endif %}
             </div>
-            <div class="col-md-7">
+            <div class="col l7 m7 s12">
               {% if current_user == post.author %} <!-- 현재 로그인한 유저와 글쓴이가 같다면 삭제할 수 있도록 -->
                 <button class="post_delete" style="color: black; margin-left: 5px; float: right;" value="{{post.pk}}"><span class="glyphicon glyphicon-trash"></span></button>
               {% endif %}
@@ -102,12 +75,12 @@
               <h2>아티스트 : {{post.artist}}</h2>
               <h2>곡명 : {{post.songname}}</h2>
               <!-- 포스팅 내용 출력 (제목과 좋아하는 가사 ) -->
-              <div class="well">
+              <div class="card hide-on-med-and-down">
                 <h2 style="font-family: 'Rancho';">{{post.title}}</h2>
                 <h3 style="font-family: 'Rancho';">{{post.text}}</h3>
-                <!-- 자세히 보기 버튼 -->
-                <h2><a class="btn btn-primary btn-lg"  href = "{% url 'post_detail' pk=post.pk %}" style="background-color: #ee6e73; float: right; font-family: 'Rancho';"><strong>Wonder</strong></a></h2>
               </div>
+              <!-- 자세히 보기 버튼 -->
+                <h2><a class="btn btn-primary btn-lg light-blue accent-4"  href = "{% url 'post_detail' pk=post.pk %}" style="float: right; font-family: 'Rancho';"><strong>Wonder</strong></a></h2>
             </div>
           </div>
         </div>
@@ -118,7 +91,7 @@
 <script>
 
 $(document).ready(function(){
-  $('.slider').slider({Height: 100, });
+      $('.carousel').carousel();
 });
 
 $(function(){ // 인터넷 페이지가 로딩되면 이 js를 쓰겠다.
@@ -146,13 +119,5 @@ $(function(){ // 인터넷 페이지가 로딩되면 이 js를 쓰겠다.
 });
 
 
-// Pause slider
-$('.slider').slider('pause');
-// Start slider
-$('.slider').slider('start');
-// Next slide
-$('.slider').slider('next');
-// Previous slide
-$('.slider').slider('prev');
 </script>
 {% endblock %}

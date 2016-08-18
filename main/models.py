@@ -27,8 +27,9 @@ class Post(models.Model):
         return self.title
     
     def get_thumb(self):
-        im = get_thumbnail(self.photo, '300x300', crop='center', quality=99)
+        im = get_thumbnail(self.photo, '50x50', crop='center', quality=99)
         return im.url # remember that sorl objects have url/width/height attributes
+    
         
     @models.permalink
     def get_absolute_url(self):

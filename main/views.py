@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from .models import Post, Vote
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.db.models import Q
 # Create your views here.
 
 # 회원가입 및 로그인 구현 부분 
@@ -86,3 +87,12 @@ def newRating(request):
         vote.save()
     
     return redirect('main.views.PostView', pk=post)
+
+
+    
+def query(request):
+    qry = request.GET['query']
+    objects = Post.objects.filter(Q(title__icontains=qry) | Q(text__icontains=qry) | Q(artist__icontains=qry) | Q(songname__icontains=qry))
+    context = {'query' : qry, 'objects' : objects,}
+    
+    return  render(request, 'main/search.html', context)
