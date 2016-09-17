@@ -22,11 +22,12 @@
       <!-- 개인화 추천 뜨는 곳 -->
       <div class="card main-recomm">
         {% suggested as suggestions limit 5  %}
-          <div class="card-content white-text">
-              <span class="card-title"><h1>Recommendations for you:</h1></span>
+          
           
           {% if user.is_authenticated %} <!-- 로그인이 되어 있다면! -->
-          
+            <div class="card-content white-text">
+              <span class="card-title"><h1>Recommendations for {{current_user}}:</h1></span>
+              
             <div class="carousel">
               {% if suggestions %} 
                   {% for suggestion in suggestions %}
@@ -36,13 +37,15 @@
           
               {% else %} <!-- 추천 목록이 아직 존재하지 않으면 Rating (Vote) 관련 정보가 없어서 그런 것이니 아래 텍스트를 출력한다 -->
                 <div class="center">
-                  <h2>아직 정보가 없네요ㅠㅠ<br> 별점을 매겨주세요!</h2>
+                  <h1>아직 정보가 없네요ㅠㅠ<br> 별점을 매겨주세요!</h1>
                 </div>
               {% endif %}
             </div>  
             
           {% else %} <!-- 로그인 안되어 있으면 아래 텍스트 출력 -->
+          <div class="center">
             <h1><strong><a href="{% url 'loginForm' %}"> 추천목록을 보시려면 로그인하세요!</a></strong></h1>
+          </div>
           {% endif %}
           </div>
 
@@ -50,7 +53,7 @@
 
       
       {% for post in posts %}
-        <div class="card" id="post_{{post.pk}}">
+        <div class="card post_list" id="post_{{post.pk}}">
           <div class="row">
             <div class="col l5 m5 s12">
               <!-- 글쓴이 정보와 썸네일 출력-->
@@ -89,6 +92,8 @@
 </div>
 
 <script>
+
+
 
 $(document).ready(function(){
       $('.carousel').carousel();

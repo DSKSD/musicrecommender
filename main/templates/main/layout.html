@@ -61,6 +61,21 @@
       
       .card{padding: 20px;}
       
+      .input-field {
+        position: relative; 
+      }
+      
+      /* style icon */
+      .input-field .material-icons {
+        position: absolute;
+        left: 230px;
+        padding-bottom: 0px;
+        border-bottom-width: 0px;
+        margin-bottom: 0px;
+        bottom: 0px;
+
+      }
+      
       .input-field label {
          color: #ffffff;
        }
@@ -80,17 +95,15 @@
          border-bottom: 1px solid #ffffff;
          box-shadow: 0 1px 0 0 #ffffff;
        }
-      
-      form {
-        display: inline-block;
-        line-height: 0;
-    }
+
+
+
   </style>
 
 
 </head>
 <body style="background-color: gray;">
-  
+      <div class="navbar-fixed">
         <nav class="main">
           <div class="nav-wrapper light-blue accent-4">
             
@@ -99,9 +112,11 @@
             <div class="search-box-mobile button-collapse">
               <div class="search-container">
                   <form action="{% url 'search' %}" method="get">
-                    <input name="query" type="text" placeholder="검색"/>
-                    <i id ="search-de-mobile" class="material-icons">&#xE5CD;</i>
-                    <input class='submit hide' type="submit"/>
+                    <div class="input-field"> 
+                      <input name="query" type="text" placeholder="검색"/>
+                      <i id="search-de-mobile" class="material-icons">&#xE5CD;</i>
+                      <input class='submit hide' type="submit"/>
+                    </div>
 
                   </form>
               </div>
@@ -161,9 +176,10 @@
             </div>
           </div>
         </nav>
-        
+      </div>  
     
 <script>
+
   $(".search-box-mobile").hide();
   $(".menu-slider").sideNav(); // 모바일일 때 메뉴들은 소멸하고 sideNav가 등장한다 (Initialize)
   
