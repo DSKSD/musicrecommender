@@ -33,3 +33,6 @@ and
 <img src="https://github.com/DSKSD/musicrecommender/blob/master/reference/screenshot1.jpg"/>
 
 <img src="https://github.com/DSKSD/musicrecommender/blob/master/reference/screenshot2.jpg"/>
+
+
+<a href="https://github.com/DSKSD/">@DSKSD</a>
