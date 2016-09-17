@@ -14,13 +14,13 @@ and
 
 <h2>Use</h2>
 
-“`
- $ python manage.py recommends_precompute # for precomputing item similarities matrix
-“`
+`
+ $ python manage.py recommends_precompute    # for precomputing item similarities matrix
+`
 
-“` 
- $ python manage.py meanstar # for computing each item's mean score of star ratings
-“`
+` 
+ $ python manage.py meanstar    # for computing each item's mean score of star ratings
+`
 
 You can also use <a href="http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html">celery</a> for periodic tasks.
 
